@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView PM10txt;
     private TextView DataTxt;
 
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         PM2txt =findViewById(R.id.PM2TV);
         PM10txt =findViewById(R.id.PM10TV);
         DataTxt = findViewById(R.id.DataTV);
+
+        progressBar = findViewById(R.id.progress);
 
 
         sensorDataAdapter = new SensorDataAdapter(this,sensorDataList);
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         PM2txt.setText(String.valueOf(sensorData.getPM2()));
         PM10txt.setText(String.valueOf(sensorData.getPM10()));
         DataTxt.setText(sensorData.getDate().toString());
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
