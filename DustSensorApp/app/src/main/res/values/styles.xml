@@ -19,7 +19,18 @@
 
     <style name="PmStyle">
         <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="PM_label_style">
+       <item name="android:textStyle">italic|bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PM_unit_style">
+        <item name="android:textStyle">italic|bold</item>
+
     </style>
 
 </resources>

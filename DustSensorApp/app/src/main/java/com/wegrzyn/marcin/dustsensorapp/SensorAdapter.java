@@ -1,7 +1,6 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,39 +11,50 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by wirea on 27.01.2018.
+ * Created by Marcin Węgrzyn on 27.01.2018.
+ *            wireamg@gmail.com
  */
 
 public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorAdapterViewHolder> {
 
-    List<SensorData> list;
-    Context context;
+    private List<SensorData> list;
+    private Context context;
+    final private ListItemClickListener listItemClickListener;
 
-
-    public SensorAdapter(Context context, List<SensorData> list) {
-        this.list = list;
-        this.context = context;
+    public interface ListItemClickListener {
+        void onListItemCickListener (int clickedItemIndex);
     }
 
-    public class SensorAdapterViewHolder extends RecyclerView.ViewHolder {
+
+    SensorAdapter(Context context, List<SensorData> list, ListItemClickListener listItemClickListener) {
+        this.list = list;
+        this.context = context;
+        this.listItemClickListener = listItemClickListener;
+    }
+
+    class SensorAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView PM2;
         TextView PM10;
-
-        TextView temp;
-        TextView press;
-
+        TextView dayWeek;
         TextView data;
 
 
-        public SensorAdapterViewHolder(View itemView) {
+        SensorAdapterViewHolder(View itemView) {
             super(itemView);
             PM2 = itemView.findViewById(R.id.TV_PM2);
             PM10 = itemView.findViewById(R.id.TV_PM10);
-            temp = itemView.findViewById(R.id.TV_temp);
-            press = itemView.findViewById(R.id.TV_pressure);
+            dayWeek = itemView.findViewById(R.id.TV_Week_Day);
             data = itemView.findViewById(R.id.TV_date);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            listItemClickListener.onListItemCickListener(getAdapterPosition());
+        }
+
     }
 
     @Override
@@ -63,8 +73,7 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorAdap
         holder.PM10.setText(String.valueOf(list.get(position).getPM10()));
         holder.PM10.setTextColor(setPm10Color(context,list.get(position).getPM10()));
 
-        holder.temp.setText(String.valueOf(list.get(position).getTemp()));
-        holder.press.setText(String.valueOf(list.get(position).getPress()));
+        holder.dayWeek.setText(list.get(position).getWeekDay());
 
         holder.data.setText(list.get(position).getDate());
     }

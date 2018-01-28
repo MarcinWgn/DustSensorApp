@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp"
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/touch_selector">
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/pm2_5"
-        app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/TV_date"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         android:layout_marginLeft="8dp" />
 
@@ -26,13 +26,12 @@
         style="@style/PmStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/TV_label_PM2"
         app:layout_constraintEnd_toStartOf="@+id/TV_Unit1"
         app:layout_constraintStart_toEndOf="@+id/TV_label_PM2"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="64"
-        android:layout_marginLeft="8dp" />
+        tools:text="264" />
 
     <TextView
         android:id="@+id/TV_Unit1"
@@ -42,7 +41,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/unit_ug_m3"
         app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         android:layout_marginRight="8dp" />
 
     <TextView
@@ -52,8 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/pm10"
-        app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM10"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintBaseline_toBaselineOf="@+id/TV_Unit1"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         android:layout_marginLeft="8dp" />
 
     <TextView
@@ -62,14 +61,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/TV_label_PM10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/TV_Unit2"
-        app:layout_constraintStart_toEndOf="@+id/TV_label_PM10"
-        app:layout_constraintTop_toBottomOf="@+id/TV_PM2"
         tools:text="295"
-        android:layout_marginLeft="8dp" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/TV_Unit2"
@@ -87,39 +84,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.38" />
 
     <TextView
         android:id="@+id/TV_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
         android:textSize="16sp"
         android:textStyle="bold|italic"
-        app:layout_constraintBaseline_toBaselineOf="@+id/TV_label_PM10"
+        app:layout_constraintBaseline_toBaselineOf="@+id/TV_Week_Day"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintStart_toStartOf="parent"
         tools:text="27.01.2018 22:22" />
 
     <TextView
         android:id="@+id/TV_Week_Day"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="28sp"
         android:textStyle="bold|italic"
-        app:layout_constraintBottom_toTopOf="@+id/TV_date"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TV_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Monday"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="16dp" />
+        tools:text="Mon" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

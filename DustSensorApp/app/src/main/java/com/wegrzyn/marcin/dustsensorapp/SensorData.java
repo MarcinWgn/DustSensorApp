@@ -1,12 +1,11 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by wirea on 28.10.2017.
+ * Created by Marcin Węgrzyn on 28.10.2017.
+ *            wireamg@gmail.com
  */
 
 public class SensorData {
@@ -68,11 +67,18 @@ public class SensorData {
     void setPress(float press) {
         Press = press;
     }
+
     String getDate(){
        Date date = new Date(PosixTime);
-       SimpleDateFormat dateFormat =  new SimpleDateFormat ("HH:mm:ss dd.MM.yyyy ");
+       SimpleDateFormat dateFormat = new SimpleDateFormat (" dd.MM.yyyy  HH:mm");
         return dateFormat.format(date);
     }
+    String getWeekDay(){
+        Date date = new Date(PosixTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("E");
+        return dateFormat.format(date);
+    }
+
 
     @Override
     public String toString() {

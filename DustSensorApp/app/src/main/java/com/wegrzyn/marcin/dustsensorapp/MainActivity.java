@@ -1,6 +1,5 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,10 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,26 +17,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorAdapter.ListItemClickListener {
 
     private final static String Tag = MainActivity.class.getSimpleName();
 
     private static final String SENSOR_DATA = "SensorData";
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-
     private List<SensorData> sensorDataList = new ArrayList<>();
 
-    private Deque<SensorData> stack = new ArrayDeque<>();
-
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private SensorAdapter adapter;
 
     private ProgressBar progressBar;
@@ -53,23 +40,22 @@ public class MainActivity extends AppCompatActivity {
 
 
         progressBar = findViewById(R.id.progress);
-        recyclerView = findViewById(R.id.dust_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.dust_recycler_view);
 
         progressBar.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-        adapter = new SensorAdapter(this,sensorDataList);
+        adapter = new SensorAdapter(this,sensorDataList, this);
 
         recyclerView.setAdapter(adapter);
 
 
-
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
         Query query = databaseReference.limitToLast(10);
         query.addChildEventListener(new ChildEventListener() {
 
@@ -100,13 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(Tag,"onCanceled");
             }
         });
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                setData(sensorDataList.get(i));
-//            }
-//        });
     }
 
     private void setData(SensorData sensorData) {
@@ -137,5 +116,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListItemCickListener(int clickedItemIndex) {
+        Log.d(Tag,"Click Item: ---> "+ String.valueOf(clickedItemIndex));
     }
 }
