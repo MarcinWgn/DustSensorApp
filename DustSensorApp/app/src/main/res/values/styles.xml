@@ -17,4 +17,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="PmStyle">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/green</item>
+    </style>
+
 </resources>

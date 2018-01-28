@@ -3,6 +3,8 @@ package com.wegrzyn.marcin.dustsensorapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,13 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
     private List<SensorData> sensorDataList = new ArrayList<>();
-    private SensorDataAdapter sensorDataAdapter;
 
-    private ListView listView;
+    private Deque<SensorData> stack = new ArrayDeque<>();
 
-    private TextView PM2txt;
-    private TextView PM10txt;
-    private TextView DataTxt;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private SensorAdapter adapter;
 
     private ProgressBar progressBar;
 
@@ -48,29 +51,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
-        listView = findViewById(R.id.listView);
-
-        PM2txt =findViewById(R.id.PM2TV);
-        PM10txt =findViewById(R.id.PM10TV);
-        DataTxt = findViewById(R.id.DataTV);
 
         progressBar = findViewById(R.id.progress);
+        recyclerView = findViewById(R.id.dust_recycler_view);
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        recyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        adapter = new SensorAdapter(this,sensorDataList);
+
+        recyclerView.setAdapter(adapter);
 
 
-        sensorDataAdapter = new SensorDataAdapter(this,sensorDataList);
-        listView.setAdapter(sensorDataAdapter);
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
-        Query query = databaseReference.limitToLast(6);
+        Query query = databaseReference.limitToLast(10);
         query.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 SensorData sensorData = dataSnapshot.getValue(SensorData.class);
-                sensorDataAdapter.add(sensorData);
-
                 setData(sensorData);
+
             }
 
             @Override
@@ -94,18 +101,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                setData(sensorDataList.get(i));
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                setData(sensorDataList.get(i));
+//            }
+//        });
     }
 
     private void setData(SensorData sensorData) {
-        PM2txt.setText(String.valueOf(sensorData.getPM2()));
-        PM10txt.setText(String.valueOf(sensorData.getPM10()));
-        DataTxt.setText(sensorData.getDate().toString());
+        Log.d("Dane", sensorData.toString());
+        adapter.setData(sensorData);
+        adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.INVISIBLE);
     }
 
