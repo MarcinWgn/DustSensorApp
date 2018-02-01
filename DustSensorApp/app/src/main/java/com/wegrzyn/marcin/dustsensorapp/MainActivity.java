@@ -1,6 +1,8 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,13 +28,15 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
     private final static String Tag = MainActivity.class.getSimpleName();
 
     private static final String SENSOR_DATA = "SensorData";
+    public static final String PM_2_TABLE = "pm2table";
+    public static final String PM_10_TABLE = "pm10table";
 
     private List<SensorData> sensorDataList = new ArrayList<>();
 
     private SensorAdapter adapter;
 
     private ProgressBar progressBar;
-
+    private static FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +59,20 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
         recyclerView.setAdapter(adapter);
 
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        if(firebaseDatabase==null){
+            firebaseDatabase= FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+        }
+
+
         DatabaseReference databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
-        Query query = databaseReference.limitToLast(10);
+        Query query = databaseReference.limitToLast(20);
         query.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 SensorData sensorData = dataSnapshot.getValue(SensorData.class);
                 setData(sensorData);
-
             }
 
             @Override
@@ -110,16 +119,30 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.exit) {
-            finish();
-            return true;
+       if (id == R.id.plot){
+            Intent intent = new Intent(this,PlotActivity.class);
+            int size = sensorDataList.size();
+
+            float pm2Table [] = new float[size];
+            float pm10Table [] = new float[size];
+
+            for (int i = 0; i < size ; i++){
+                pm2Table[i] = sensorDataList.get(i).getPM2();
+                pm10Table[i] = sensorDataList.get(i).getPM10();
+            }
+            intent.putExtra(PM_2_TABLE,pm2Table);
+            intent.putExtra(PM_10_TABLE,pm10Table);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onListItemCickListener(int clickedItemIndex) {
-        Log.d(Tag,"Click Item: ---> "+ String.valueOf(clickedItemIndex));
+        Intent intent = new Intent(this,DetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT,sensorDataList.get(clickedItemIndex));
+        startActivity(intent);
     }
 }

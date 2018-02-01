@@ -1,5 +1,10 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
+import android.icu.text.DecimalFormat;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,7 +13,7 @@ import java.util.Date;
  *            wireamg@gmail.com
  */
 
-public class SensorData {
+public class SensorData implements Parcelable{
 
     private long PosixTime;
     private float PM2;
@@ -23,6 +28,41 @@ public class SensorData {
         this.Press = Press;
         this.Temp = Temp;
         this.PosixTime = PosixTime;
+    }
+
+    private SensorData(Parcel in) {
+        PosixTime = in.readLong();
+        PM2 = in.readFloat();
+        PM10 = in.readFloat();
+        Temp = in.readFloat();
+        Press = in.readFloat();
+    }
+
+    public static final Creator<SensorData> CREATOR = new Creator<SensorData>() {
+        @Override
+        public SensorData createFromParcel(Parcel in) {
+            return new SensorData(in);
+        }
+
+        @Override
+        public SensorData[] newArray(int size) {
+            return new SensorData[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeLong(PosixTime);
+        dest.writeFloat(PM2);
+        dest.writeFloat(getPM10());
+        dest.writeFloat(Temp);
+        dest.writeFloat(Press);
     }
 
     SensorData() {
@@ -78,7 +118,16 @@ public class SensorData {
         SimpleDateFormat dateFormat = new SimpleDateFormat ("E");
         return dateFormat.format(date);
     }
+    String getFullDate(){
+        Date date = new Date(PosixTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("E dd.MM.yyyy  HH:mm");
+        return dateFormat.format(date);
+    }
 
+    static String numberFormat(float number){
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.#");
+        return df.format(number);
+    }
 
     @Override
     public String toString() {
@@ -96,5 +145,7 @@ public class SensorData {
                 "\n" +
                 new Date(PosixTime).toString();
     }
+
+
 }
 

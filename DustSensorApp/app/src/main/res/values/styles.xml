@@ -30,7 +30,21 @@
 
     <style name="PM_unit_style">
         <item name="android:textStyle">italic|bold</item>
-
     </style>
+
+    <style name="PM_Big_style">
+        <item name="android:textSize">55sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PM_Big_label_style">
+        <item name="android:textStyle">italic|bold</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="PM_label_mini">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">italic|bold</item>
+    </style>
+
 
 </resources>

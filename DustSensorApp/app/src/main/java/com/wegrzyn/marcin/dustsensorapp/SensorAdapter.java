@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static com.wegrzyn.marcin.dustsensorapp.Utils.setPm10Color;
+import static com.wegrzyn.marcin.dustsensorapp.Utils.setPm2Color;
+
 /**
  * Created by Marcin Węgrzyn on 27.01.2018.
  *            wireamg@gmail.com
@@ -67,6 +70,7 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorAdap
 
     @Override
     public void onBindViewHolder(SensorAdapterViewHolder holder, int position) {
+
         holder.PM2.setText(String.valueOf(list.get(position).getPM2()));
         holder.PM2.setTextColor(setPm2Color(context,list.get(position).getPM2()));
 
@@ -88,19 +92,4 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorAdap
 
         list.add(sensorData) ;
     }
-    private int setPm10Color(Context context, float pm ){
-        if(pm < 50)return ContextCompat.getColor(context,R.color.green);
-        else if (pm < 100) return ContextCompat.getColor(context,R.color.yellow);
-        else if (pm < 150) return ContextCompat.getColor(context,R.color.orange);
-        else return ContextCompat.getColor(context, R.color.red);
-
-    }
-    private int setPm2Color(Context context, float pm ){
-        if(pm < 30)return ContextCompat.getColor(context,R.color.green);
-        else if (pm < 60) return ContextCompat.getColor(context,R.color.yellow);
-        else if (pm < 120) return ContextCompat.getColor(context,R.color.orange);
-        else return ContextCompat.getColor(context, R.color.red);
-
-    }
-
 }
