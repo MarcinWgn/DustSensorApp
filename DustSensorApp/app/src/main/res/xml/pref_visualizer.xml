@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:defaultValue="@string/_10"
+        android:inputType="number"
+        android:key="@string/key_number_elements"
+        android:numeric="integer"
+        android:title="ilość danych" />
+
+</PreferenceScreen>

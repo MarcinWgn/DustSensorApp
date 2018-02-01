@@ -1,9 +1,11 @@
 package com.wegrzyn.marcin.dustsensorapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +25,8 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements SensorAdapter.ListItemClickListener,
+SharedPreferences.OnSharedPreferenceChangeListener{
 
     private final static String Tag = MainActivity.class.getSimpleName();
 
@@ -38,11 +41,14 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
     private ProgressBar progressBar;
     private static FirebaseDatabase firebaseDatabase;
 
+    private int numberItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
+        sharedPref();
 
         progressBar = findViewById(R.id.progress);
         RecyclerView recyclerView = findViewById(R.id.dust_recycler_view);
@@ -65,8 +71,17 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
         }
 
 
+        queryFirebase();
+    }
+
+    private void queryFirebase() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        adapter.clearData();
+
         DatabaseReference databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
-        Query query = databaseReference.limitToLast(20);
+        Query query = databaseReference.limitToLast(numberItem);
+
         query.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -97,8 +112,27 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void sharedPref(){
+        SharedPreferences sharedPreferences
+                = PreferenceManager.getDefaultSharedPreferences(this);
+        getPreferences(sharedPreferences);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void getPreferences(SharedPreferences sharedPreferences) {
+        String numberString = sharedPreferences.getString(getResources()
+                .getString(R.string.key_number_elements),getString(R.string._10));
+        numberItem = Integer.parseInt(numberString);
+    }
+
     private void setData(SensorData sensorData) {
-        Log.d("Dane", sensorData.toString());
         adapter.setData(sensorData);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.INVISIBLE);
@@ -133,6 +167,13 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
             intent.putExtra(PM_2_TABLE,pm2Table);
             intent.putExtra(PM_10_TABLE,pm10Table);
             startActivity(intent);
+
+            return true;
+        }
+        if(id == R.id.action_settings){
+           Intent intent = new Intent(this, SettingsActivity.class);
+           startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,4 +186,14 @@ public class MainActivity extends AppCompatActivity implements SensorAdapter.Lis
         intent.putExtra(Intent.EXTRA_TEXT,sensorDataList.get(clickedItemIndex));
         startActivity(intent);
     }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        if(key.equals(getString(R.string.key_number_elements))){
+            getPreferences(sharedPreferences);
+            queryFirebase();
+            Log.d(Tag,"---------------->"+String.valueOf(numberItem));
+    }
+}
 }

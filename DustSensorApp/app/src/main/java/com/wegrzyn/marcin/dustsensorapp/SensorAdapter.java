@@ -92,4 +92,7 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorAdap
 
         list.add(sensorData) ;
     }
+    public void clearData(){
+        list.clear();
+    }
 }

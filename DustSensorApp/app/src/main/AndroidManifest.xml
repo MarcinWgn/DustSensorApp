@@ -26,11 +26,15 @@
 
         <activity
             android:name=".DetailActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:label="@string/detail_data"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".PlotActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".SettingsActivity"></activity>
+            android:label="@string/chart"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SettingsActivity"
+            android:label="@string/action_settings"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
