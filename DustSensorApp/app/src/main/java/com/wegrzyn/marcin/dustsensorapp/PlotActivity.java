@@ -76,9 +76,5 @@ public class PlotActivity extends AppCompatActivity {
         lineChart.setData(lineData);
         lineChart.invalidate();
 
-
-//        Log.d(TAG, "Table "+String.valueOf(pm2Table[9])+
-//                " "+String.valueOf(pm10Table[9])+
-//                " size: "+String.valueOf(size));
     }
 }

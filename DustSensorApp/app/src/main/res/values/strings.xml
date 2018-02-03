@@ -22,4 +22,6 @@
     <string name="detail_data">Detail data</string>
     <string name="key_number_elements">number_elements</string>
     <string name="_10">10</string>
+    <string name="number_rows">max number rows of data</string>
+    <string name="enter_cor_number">enter the correct number !!!</string>
 </resources>

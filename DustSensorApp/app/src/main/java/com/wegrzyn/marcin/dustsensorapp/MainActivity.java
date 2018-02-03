@@ -5,13 +5,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ SharedPreferences.OnSharedPreferenceChangeListener{
         progressBar = findViewById(R.id.progress);
         RecyclerView recyclerView = findViewById(R.id.dust_recycler_view);
 
+
         progressBar.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
@@ -78,6 +84,7 @@ SharedPreferences.OnSharedPreferenceChangeListener{
 
         progressBar.setVisibility(View.VISIBLE);
         adapter.clearData();
+        sensorDataList.clear();
 
         DatabaseReference databaseReference = firebaseDatabase.getReference(SENSOR_DATA);
         Query query = databaseReference.limitToLast(numberItem);
@@ -129,7 +136,9 @@ SharedPreferences.OnSharedPreferenceChangeListener{
     private void getPreferences(SharedPreferences sharedPreferences) {
         String numberString = sharedPreferences.getString(getResources()
                 .getString(R.string.key_number_elements),getString(R.string._10));
-        numberItem = Integer.parseInt(numberString);
+        if(TextUtils.isDigitsOnly(numberString)&&0!=Integer.parseInt(numberString)){
+            numberItem = Integer.parseInt(numberString);
+        }
     }
 
     private void setData(SensorData sensorData) {
@@ -193,7 +202,8 @@ SharedPreferences.OnSharedPreferenceChangeListener{
         if(key.equals(getString(R.string.key_number_elements))){
             getPreferences(sharedPreferences);
             queryFirebase();
-            Log.d(Tag,"---------------->"+String.valueOf(numberItem));
+            Log.d(SettingsFragment.TAG,"onSharedPreferenceChanged");
+
     }
 }
 }
