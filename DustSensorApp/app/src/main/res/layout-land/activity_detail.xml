@@ -24,11 +24,10 @@
         style="@style/PM_Big_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/pm2_5"
         app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM2"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintEnd_toStartOf="@+id/TV_PM2" />
 
     <TextView
         android:id="@+id/TV_PM2"
@@ -48,11 +47,10 @@
         style="@style/PM_Big_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/unit_ug_m3"
         app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM2"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/TV_label_PM10"
@@ -81,11 +79,10 @@
         style="@style/PM_Big_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/unit_ug_m3"
         app:layout_constraintBaseline_toBaselineOf="@+id/TV_PM10"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
@@ -99,11 +96,10 @@
         style="@style/PM_label_mini"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/press"
         app:layout_constraintBaseline_toBaselineOf="@+id/TV_press"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintEnd_toStartOf="@+id/TV_press" />
 
     <TextView
         android:id="@+id/TV_press"
